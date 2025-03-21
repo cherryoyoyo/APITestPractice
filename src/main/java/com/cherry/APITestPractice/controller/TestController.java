@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cherry.APITestPractice.dao.TestDao;
+import com.cherry.APITestPractice.dao.JdbcDao;
 import com.cherry.APITestPractice.model.TestModel;
 import com.cherry.APITestPractice.service.TestService;
 
@@ -25,6 +26,7 @@ public class TestController {
 	@Autowired
 	public TestDao testDao;
 	public TestModel database;
+	public JdbcDao jdbcDao;
 
 	@PostMapping("/save")
 	public String save( @RequestBody  TestModel data) {
@@ -33,7 +35,9 @@ public class TestController {
 			System.out.println(name);
 			System.out.println(password);
 			//存入資料庫
-			testDao.save(data);
+//			testDao.save(data);
+			
+			jdbcDao.save();
 			return "save成功";
 			
 	}

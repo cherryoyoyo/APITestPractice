@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    name<input type="text" id="name">
+    password<input type="text" id="password">
+    <p id="vvn">雪花飛</p>
+    <p id="beautiful">美麗新世界</p>
+
+    <p id="thisid">ID</p>
+    <p id="findname">回傳姓名</p>
+    <p id="findpassword">回傳密碼</p>
+
+   
+    <button onclick="aa()">新增</button>
+    <button onclick="bb()">修改</button>
+    <button onclick="cc()">刪除</button>
+    <button onclick="dd()">查詢</button>
+    <p id="result">結果</p>
+
+
+    <script>
+
+        function aa() {
+            
+            console.log(document.getElementById("name").value)
+            console.log(document.getElementById("password").value)
+
+            //透過API去把前端資料放進變數送過去
+            fetch('/test/save', {
+                method: 'POST', // 指定請求方法為 POST
+                headers: {
+                    'Content-Type': 'application/json' // 告知伺服器發送的是 JSON 格式
+                },
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    password: document.getElementById("password").value
+                }) 
+            })
+                .then(response => {
+                    return response.text();
+                    
+                    
+                })
+                .then(data => console.log('後端拿到成功:', data)) // 成功後處理資料
+                .catch(error => console.error('錯誤沒有拿到:', error)); // 捕捉錯誤
+
+
+
+        }
+
+        function bb() {
+            
+            fetch('/test/update', {
+                method: 'POST', // 指定請求方法為 POST
+                headers: {
+                    'Content-Type': 'application/json' // 告知伺服器發送的是 JSON 格式
+                },
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    password: document.getElementById("password").value
+                }) 
+            })
+                .then(response => {return response.text()})// 讀取後端回應內容（字串格式）
+                //data來自上一個response return的String
+                //所以data=respone.text()=後端回傳的內容
+                .then(vvv => {
+                    console.log(vvv);
+                    var me="tap me change";
+                    document.getElementById("vvn").textContent = me;
+                })
+
+                .catch(error => console.error('錯誤沒有拿到:', error)); // 捕捉錯誤
+
+        }
+
+
+        function cc() {
+            
+            fetch('/test/delete', {
+                method: 'POST', // 指定請求方法為 POST
+                headers: {
+                    'Content-Type': 'application/json' // 告知伺服器發送的是 JSON 格式
+                },
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    password: document.getElementById("password").value
+                }) 
+            })
+                .then(response => {return response.text()})// 讀取後端回應內容（字串格式）
+                //data來自上一個response return的String
+                //所以data=respone.text()=後端回傳的內容
+                .then(datatest => {
+                    console.log(datatest);
+                    var me="i am changing now";
+                    document.getElementById("beautiful").textContent = me;
+                })
+
+                .catch(error => console.error('錯誤沒有拿到:', error)); // 捕捉錯誤
+
+        }
+
+        function dd() {
+
+            fetch('/test/find', {
+                method: 'POST', // 指定請求方法為 POST
+                headers:{
+
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    password: document.getElementById("password").value
+                }) 
+        })
+        .then(response => {return response.json()})
+        .then(datafromlast => {
+            console.log(datafromlast)
+            var ob=datafromlast[1];
+            document.getElementById("thisid").textContent = ob.id;
+            document.getElementById("findname").textContent = ob.name;
+            document.getElementById("findpassword").textContent = ob.password;
+        })
+        .catch(error => console.error('錯誤沒有拿到:', error))
+    }
+
+
+    </script>
+</body>
+
+</html>
